@@ -1,0 +1,23 @@
+#!/usr/bin/node
+var readline = require('readline');
+var rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+  terminal: false
+});
+var net = require('net');
+var stop;
+
+rl.on('line', function(line){
+    data = JSON.parse(line);
+    if(data.action=="stop") { stop=1; }
+    if(eval(process.argv[2])) { 
+       data.action="stop";
+       //console.error(JSON.stringify(data));
+       stop=1; }
+    console.log(JSON.stringify(data));
+
+    if(stop==1) { 
+       process.exit(1); }
+})
+

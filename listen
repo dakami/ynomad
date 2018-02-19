@@ -1,0 +1,30 @@
+#!/usr/bin/node
+
+var readline = require('readline');
+var rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+  terminal: false
+});
+var net = require('net');
+var stop;
+
+rl.on('line', function(line){
+    data = JSON.parse(line);
+    if(data.action=="stop") { stop=1; }
+    console.log(JSON.stringify(data));
+    if(stop==1) { process.exit(1); }
+})
+
+var server = net.createServer(function(socket) {
+	socket.on('data', function(data) {
+             data = JSON.parse(data.toString());
+             if(data.action=="stop") { stop=1; }
+             console.log(JSON.stringify(data));
+             if(stop==1) { process.exit(1); }
+         });
+})
+
+server.listen(process.argv[2], '127.0.0.1');
+
+
